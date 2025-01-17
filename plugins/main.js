@@ -1,20 +1,19 @@
-const config = require('../config')
 const { cmd, commands } = require('../command');
-const os = require("os")
-const {runtime} = require('../lib/functions')
-const axios = require('axios')
+const os = require("os");
+const { runtime } = require('../lib/functions');
 
 cmd({
-    pattern: "menu2",
-    alias: "allmenu",
-    desc: "menu the bot",
-    category: "menu",
-    react: "⚡",
+    pattern: "menu",
+    alias: ["status", "runtime", "uptime"],
+    desc: "Check uptime and system status",
+    category: "main",
+    react: "🏆",
     filename: __filename
-}, 
+},
 async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply }) => {
     try {
-        let dec = `╭━━━〔 *${config.BOT_NAME}* 〕━━━┈⊷
+        // Generate system status message
+        const status = `╭━━━〔 *${config.BOT_NAME}* 〕━━━┈⊷
 ┃★╭──────────────
 ┃★│ Owner : *${config.OWNER_NAME}*
 ┃★│ Baileys : *Multi Device*
@@ -22,7 +21,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃★│ Platform : *Heroku*
 ┃★│ Mode : *[${config.MODE}]*
 ┃★│ Prifix : *[${config.PREFIX}]*
-┃★│ Version : *2.0.0 Bᴇᴛᴀ*
+┃★│ Version : *3.0.0*
 ┃★╰──────────────
 ╰━━━━━━━━━━━━━━━┈⊷
 ╭━━〔 *Download Menu* 〕━━┈⊷
@@ -212,36 +211,26 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ┃◈┃• *ytv*
 ┃◈└───────────┈⊷
 ╰──────────────┈⊷
-> ${config.DESCRIPTION}`;
+> *${config.DESCRIPTION}*`;
 
-        await conn.sendMessage(
-            from,
-            {
-                image: { url: `https://i.ibb.co/NTSd8hb/mrfrankofc.jpg` },
-                caption: dec,
-                contextInfo: {
-                    mentionedJid: [m.sender],
-                    forwardingScore: 999,
-                    isForwarded: true,
-                    forwardedNewsletterMessageInfo: {
-                        newsletterJid: '120363299029326322@newsletter',
-                        newsletterName: '𝐌𝖊𝖗𝖈𝖊𝖉𝖊𝖘',
-                        serverMessageId: 143
-                    }
+        // Send the status message with an image
+        await conn.sendMessage(from, { 
+            image: { url: `https://i.ibb.co/S3WYRHV/mrfrankofc.jpg` },  // Image URL
+            caption: status,
+            contextInfo: {
+                mentionedJid: [m.sender],
+                forwardingScore: 999,
+                isForwarded: true,
+                forwardedNewsletterMessageInfo: {
+                    newsletterJid: '120363299029326322@newsletter',
+                    newsletterName: '𝐌𝖊𝖗𝖈𝖊𝖉𝖊𝖘',
+                    serverMessageId: 143
                 }
-            },
-            { quoted: mek }
-        );
-
-        // Send audio
-        await conn.sendMessage(from, {
-            audio: { url: 'https://github.com/JawadYTX/KHAN-DATA/raw/refs/heads/main/autovoice/sigma.m4a' },
-            mimetype: 'audio/mp4',
-            ptt: true
+            }
         }, { quoted: mek });
-        
+
     } catch (e) {
-        console.log(e);
-        reply(`${e}`);
+        console.error("Error in alive command:", e);
+        reply(`An error occurred: ${e.message}`);
     }
 });
